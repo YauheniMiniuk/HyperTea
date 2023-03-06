@@ -1,0 +1,47 @@
+<html>
+
+<head>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
+    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <div class="main">
+        <div id="header" class="header"></div>
+        
+        <div id="work-screen" class="work-screen">
+            <div class="text-center">
+                <h2>Выберите получателя</h2>
+            </div>
+            <form>
+                <div class="form-control">
+                    <label for="recipient">Получатель</label>
+                    <input type="text" name="recipient" id="recipient" class="input-group">
+                </div>
+                <div class="form-control">
+                    <div id="qrReader"></div><br/>
+                </div>
+                <div class="form-control">
+                    <label for="recipient">Сумма</label>
+                    <input type="text" name="sum" id="sum" class="input-group">
+                </div>
+                <div class="form-control">
+                    <a href="transactionResult.html" class="btn btn-primary" onclick="Transfer(recipient.value, sum.value)">Отправить</a>
+                </div>
+            </form>
+        </div>
+        
+        <div id="navigation" class="navigation"></div>
+    </div>
+</body>
+
+<script src="./js/ui.js"></script>
+<script src="../assets/androidjs.js"></script>  
+<script src="./js/html5-qrcode.min.js"></script>
+<script src="./js/script.js"></script>
+<script>
+    openCamera("recipient");
+</script>
+</html>

@@ -1,0 +1,55 @@
+<html>
+
+<head>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
+    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <div class="main">
+        <div id="header" class="header"></div>
+        
+        <div class="work-screen">
+            <div>
+                <h2>Регистрация пользователя</h2>
+            </div>
+            <div class="form-control">
+                <label for="userName">Имя пользователя</label>
+                <input type="text" class="input-group text-center" name="userName" id="userName" readonly/>
+            </div>
+            <div class="p-1">
+                <div class="text-center">
+                    <span>Сертификат</span>
+                </div>
+                <div class="text-center center imageDiv">
+                    <span id="certificate" class="text-center imageDiv"></span>
+                </div>
+            </div>
+            <div class="p-1">
+                <div class="text-center">
+                    <span>Приватный ключ</span>
+                </div>
+                <div class="text-center center imageDiv">
+                    <span id="privateKey" class="text-center imageDiv"></span>
+                </div>
+            </div>
+        </div>
+        
+        <div id="navigation" class="navigation"></div>
+    </div>
+</body>
+
+<script src="./js/ui.js"></script>
+<script src="./../assets/androidjs.js"></script>  
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+<script src="./js/script.js"></script>
+<script>
+    let params = (new URL(document.location)).searchParams; 
+    let userName = params.get("userName");
+    ReadWallet(userName);
+
+</script>
+
+</html>

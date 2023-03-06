@@ -1,0 +1,49 @@
+<html>
+
+<head>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
+    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
+    <link rel="stylesheet" href="../lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/style.css" />
+</head>
+
+<body>
+    <div class="main">
+        <div id="header" class="header"></div>
+        
+        <div class="work-screen">
+            <div>
+                <h2>Информация о переводе</h2>
+            </div>
+            <form>
+                <div class="form-control">
+                    <label for="recipient">Получатель</label>
+                    <input type="text" class="input-group" name="recipient" value="abobus" readonly/>
+                </div>
+                <div class="form-control">
+                    <label for="sum">Сумма</label>
+                    <input type="text" class="input-group" name="sum" value="100" readonly/>
+                </div>
+    
+                <div class="form-control">
+                    <input type="submit" class="btn btn-primary" id="confirm" value="Подтвердить" onclick="Transfer(recipient.value, sum.value)">
+                    <input type="button" class="btn btn-danger" id="cancel" value="Отклонить">
+                </div>
+            </form>
+            <div>
+                <span id="result" class="text-center"></span>
+            </div>
+        </div>
+        
+        <div id="navigation" class="navigation"></div>
+    </div>
+</body>
+
+<script src="../js/ui.js"></script>
+<script src="../../assets/androidjs.js"></script>  
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+<script src="../js/script.js"></script>
+<script>
+</script>
+
+</html>

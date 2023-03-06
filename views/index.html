@@ -1,0 +1,34 @@
+<html>
+
+<head>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
+    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <div class="main">
+        <div id="header" class="header"></div>
+        
+        <div class="text-center">
+            <h2>Доступные кошельки</h2>
+        </div>
+
+        <div id="work-screen" class="work-screen">
+        </div>
+        
+        <div id="navigation" class="navigation"></div>
+    </div>
+</body>
+
+<script src="../assets/androidjs.js"></script>
+<script src="./js/ui.js"></script>
+<script src="./js/script.js"></script>
+<script src="./js/wallets.js"></script>
+<script>
+    WalletList();
+</script>
+
+
+</html>

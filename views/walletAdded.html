@@ -1,0 +1,38 @@
+<html>
+
+<head>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
+    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <div class="main">
+        <div id="header" class="header"></div>
+        
+        <div class="work-screen">
+            <div class="text-center center">
+                <h2 id="answer"></h2>
+            </div>
+        </div>
+        
+        <div id="navigation" class="navigation"></div>
+    </div>
+</body>
+
+<script src="./js/ui.js"></script>
+<script src="../assets/androidjs.js"></script>  
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+<script src="./js/script.js"></script>
+<script src="./js/wallets.js"></script>
+<script>
+    window.onload = function(){
+        let params = (new URL(document.location)).searchParams; 
+
+        let userName = params.get("userName");
+        let cert = params.get("cert");
+        let pKey = params.get("pKey");
+    }
+</script>
+</html>

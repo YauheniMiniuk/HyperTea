@@ -1,0 +1,33 @@
+{
+  "name": "myapp",
+  "app-name": "myapp",
+  "package-name": "mypkg",
+  "project-type": "webview",
+  "icon": "./assets/icon/icon.png",
+  "directories": {
+    "lib": "./lib"
+  },
+  "permission": [
+    "android.permission.INTERNET",
+    "android.permission.WRITE_EXTERNAL_STORAGE",
+    "android.permission.READ_EXTERNAL_STORAGE",
+    "android.permission.CAMERA",
+    "android.permission.READ_MEDIA_IMAGES",
+    "android.permission.READ_MEDIA_VIDEO",
+    "android.permission.READ_MEDIA_AUDIO"
+  ],
+  "version": "1.0.0",
+  "dist-path": "./dist",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Yauheni Miniuk",
+  "license": "ISC",
+  "dependencies": {
+    "androidjs": "^1.0.5",
+    "fabric-ca-client": "^2.2.16",
+    "fabric-network": "^2.2.16"
+  }
+}

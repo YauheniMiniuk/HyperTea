@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
+    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <div class="main">
+        <div id="header" class="header"></div>
+        
+        <div class="work-screen">
+            <form>
+                <div class="text-center">
+                    <h2>Операции с кошельком</h2>
+                </div>
+                <div class="form-control">
+                    <a class="btn btn-primary list-group m-1" onclick="EnrollAdmin()">Create Admin</a>
+                    <a class="btn btn-primary list-group m-1" href="registerUser.html">Register User</a>
+                    <a class="btn btn-primary list-group m-1" href="readCert.html">Add wallet</a>
+                    <a class="btn btn-primary list-group m-1" href="selectPeer.html">Select peer</a>
+                </div>
+    
+                <div class="text-center">
+                    <h2>Транзакции</h2>
+                </div>
+                <div class="form-control">
+                    <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="Initialize()" href="transactionResult.html">Initialize</a>
+                    <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="Mint('100')">Mint</a>
+                    <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="Burn('100')">Burn</a>
+                    <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="ClientAccountBalance()">Balance</a>
+                    <a class="btn btn-primary list-group m-1" href="transfer.html">Transfer</a>
+                </div>
+                <div>
+                    <input type="hidden" name="result" id="result" value="hehe">
+                </div>
+            </form>
+            <div id="result" class="result"></div>
+            
+        </div>
+        
+        <div id="navigation" class="navigation"></div>
+    </div>
+</body>
+
+<script src="./js/ui.js"></script>
+<script src="../assets/androidjs.js"></script>  
+<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+<script src="./js/script.js"></script>
+
+</html>

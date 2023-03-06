@@ -1,0 +1,58 @@
+<html>
+
+<head>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
+    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <div class="main">
+        <div id="header" class="header"></div>
+        
+        <div class="work-screen">
+            <div>
+                <h2>Просканируйте приватный ключ</h2>
+            </div>
+            <div id="qrReader"></div><br/>
+            <form action="walletAdded.html">
+
+                <div>
+                    <input type="hidden" class="input-group-text" name="userName" id="userName">
+                </div>
+                <div>
+                    <input type="hidden" class="input-group-text" name="cert" id="cert">
+                </div>
+
+                <div class="form-control center">
+                    <input type="text" class="input-group-text" name="pKey" id="pKey">
+                </div>
+
+                <div id="qrReader"></div>
+
+                <div class="form-control">
+                    <input type="submit" class="btn btn-primary" value="Далее" onclick="RegisterUserInWallet(userName.value, cert.value, pKey.value);">
+                </div>
+            </form>
+        </div>
+        
+        <div id="navigation" class="navigation"></div>
+    </div>
+</body>
+
+<script src="./js/ui.js"></script>
+<script src="../assets/androidjs.js"></script>  
+<script src="./js/html5-qrcode.min.js"></script>
+<script src="./js/script.js"></script>
+<script>
+    let params = (new URL(document.location)).searchParams; 
+    let userName = params.get("userName");
+    let cert = params.get("cert");
+
+    document.getElementById('userName').setAttribute('value', userName);
+    document.getElementById('cert').setAttribute('value', cert);
+
+    openCamera("pKey");
+</script>
+</html>
