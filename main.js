@@ -12,6 +12,19 @@ const gateway = {
     
 }
 
+class Account{
+    static Wallet = null;
+    static OrgID = null;
+    static ccp = null;
+
+    static checkWallet(){
+        if (this.Wallet == null){
+            back.send("CheckWallet", false);
+            return;
+        }
+    }
+}
+
 // const walletPath =`/data/data/com.androidjs.mypkg/files/myapp/wallet`;
 const walletPath = `${__dirname}/wallet`;
 const gatewayPath = `${__dirname}/gateway`;
@@ -82,14 +95,14 @@ back.on('Initialize', async function(){
     back.send("Initialize", result);
 })
 
-back.on('Mint', async function(value){
-    let result = await Mint("100");
+back.on('Mint', async function(name, price, amount, recipient){
+    let result = await Mint(name, price, amount, recipient);
     console.log(result);
-    back.send("Mint", result);
+    back.send("MintResult", result);
 })
 
-back.on('Burn', async function(value){
-    let result = await Burn("100");
+back.on('Burn', async function(tokenId){
+    let result = await Burn(tokenId);
     console.log(result);
     back.send("Burn");
 })
@@ -100,25 +113,32 @@ back.on('ClientAccountID', async function(){
     back.send("ClientAccountIDResult", result);
 })
 
-back.on('ClientAccountBalance', async function(){
-    // let result;
-    
-    // try{
-    //     let store = new FileSystemWalletStore(walletPath);
-    //     let wallet = new Wallet(store);
-    //     result = wallet;
-    // }catch(error){
-    //     result = error.toString();
-    // }
-    
-    let result = await ClientAccountBalance();
+back.on('QueryClientTokens', async function(){
+    let result = await QueryClientTokens();
     // console.log(result)
-    back.send("ClientAccountBalanceResult", result);
+    back.send("QueryClientTokensResult", result);
+})
+
+back.on('QueryTokensByClientID', async function(clientID){
+    let result = await QueryTokensByClientID(clientID);
+    // console.log(result)
+    back.send("QueryTokensByClientIDResult", result);
+})
+
+back.on('QueryAllTokens', async function(){
+    let result = await QueryAllTokens();
+    // console.log(result)
+    back.send("QueryAllTokensResult", result);
 })
 
 back.on('Transfer', async function(recipient, value){
     var result = await Transfer(recipient, value);
     back.send("TransferResult", result);
+})
+
+back.on('HistoryForKey', async function(tokenId){
+    var result = await HistoryForKey(tokenId);
+    back.send("HistoryForKeyResult", result);
 })
 
 back.on('EnrollAdmin', async function(){
@@ -167,11 +187,11 @@ async function Initialize(){
         gateway.disconnect();
         return true;
     } catch(error){
-        console.log(error);
+        return error.toString();
     }
 }
 
-async function Mint(value){
+async function Mint(name, price, amount, recipient){
     try{
         var wallet = await Wallets.newFileSystemWallet(walletPath);
 
@@ -192,15 +212,17 @@ async function Mint(value){
         // Get the contract from the network.
         const contract = network.getContract('cbdc');
 
-        await contract.submitTransaction('Mint', value);
-        console.log(`Было выпущено ${value} цифровых белорусских рублей.`);
+        // var result = await contract.evaluateTransaction('Mint', value);
+        await contract.submitTransaction("Mint", name, price, amount, recipient);
+        // console.log(`Было выпущено ${value} цифровых белорусских рублей.`);
+        console.log(`Был выпущен токен: ${name}.`);
 
         // Disconnect from the gateway.
         gateway.disconnect();
-        return true;
+        return "Токен был выпущен";
     } catch(error){
         console.log(error);
-        return false;
+        return error.toString();
     }
 }
 async function Burn(value){
@@ -224,14 +246,15 @@ async function Burn(value){
         // Get the contract from the network.
         const contract = network.getContract('cbdc');
 
-        await contract.submitTransaction('Burn', value);
-        console.log(`Было сожжено ${value} цифровых белорусских рублей.`);
+        var result = await contract.submitTransaction('Burn', value);
+        // console.log(`Было сожжено ${value} цифровых белорусских рублей.`);
 
         // Disconnect from the gateway.
         gateway.disconnect();
-        return `Было сожжено ${value} цифровых белорусских рублей.`;
+        // return `Было сожжено ${value} цифровых белорусских рублей.`;
+        return result;
     } catch(error){
-        console.log(error);
+        return error.toString();
     }
 }
 async function ClientAccountID(){
@@ -265,12 +288,12 @@ async function ClientAccountID(){
         gateway.disconnect();
         return result.toString();
     } catch(error){
-        console.log(error);
+        return error.toString();
     }
     
 }
 
-async function ClientAccountBalance(){
+async function QueryClientTokens(){
     try{
         var wallet = await Wallets.newFileSystemWallet(walletPath);
 
@@ -293,7 +316,8 @@ async function ClientAccountBalance(){
         // Get the contract from the network.
         const contract = network.getContract('cbdc');
         
-        const result = await contract.evaluateTransaction('ClientAccountBalance');
+        // const result = await contract.evaluateTransaction('ClientAccountBalance');
+        const result = await contract.evaluateTransaction('QueryClientTokens');
         // Disconnect from the gateway.
         gateway.disconnect();
         return result.toString();
@@ -303,7 +327,75 @@ async function ClientAccountBalance(){
     
 }
 
-async function Transfer(recipient, sum){
+async function QueryTokensByClientID(clientID){
+    try{
+        var wallet = await Wallets.newFileSystemWallet(walletPath);
+
+        // let store = new FileSystemWalletStore(walletPath);
+        // let wallet = new Wallet(store);
+
+        // Check to see if we've already enrolled the user.
+        const identity = await wallet.get("admin2");
+        if (!identity) {
+            console.log(`An identity for the user ${WALLET} does not exist in the wallet`);
+            return `An identity for the user ${WALLET} does not exist in the wallet`;
+        }
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccp, { wallet, identity: WALLET, discovery: { enabled: true, asLocalhost: true } });
+
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway.getNetwork('mychannel');
+
+        // Get the contract from the network.
+        const contract = network.getContract('cbdc');
+        
+        // const result = await contract.evaluateTransaction('ClientAccountBalance');
+        const result = await contract.evaluateTransaction('QueryTokensByClientID', clientID);
+        // Disconnect from the gateway.
+        gateway.disconnect();
+        return result.toString();
+    } catch(error){
+        return error.toString();
+    }
+    
+}
+
+async function QueryAllTokens(){
+    try{
+        var wallet = await Wallets.newFileSystemWallet(walletPath);
+
+        // let store = new FileSystemWalletStore(walletPath);
+        // let wallet = new Wallet(store);
+
+        // Check to see if we've already enrolled the user.
+        const identity = await wallet.get("admin2");
+        if (!identity) {
+            console.log(`An identity for the user ${WALLET} does not exist in the wallet`);
+            return `An identity for the user ${WALLET} does not exist in the wallet`;
+        }
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccp, { wallet, identity: WALLET, discovery: { enabled: true, asLocalhost: true } });
+
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway.getNetwork('mychannel');
+
+        // Get the contract from the network.
+        const contract = network.getContract('cbdc');
+        
+        // const result = await contract.evaluateTransaction('ClientAccountBalance');
+        const result = await contract.evaluateTransaction('QueryAllTokens');
+        // Disconnect from the gateway.
+        gateway.disconnect();
+        return result.toString();
+    } catch(error){
+        return error.toString();
+    }
+    
+}
+
+async function Transfer(tokenId, recipient){
     try{
         var wallet = await Wallets.newFileSystemWallet(walletPath);
 
@@ -324,14 +416,49 @@ async function Transfer(recipient, sum){
         // Get the contract from the network.
         const contract = network.getContract('cbdc');
 
-        await contract.submitTransaction('Transfer', recipient, sum);
+        await contract.submitTransaction('Transfer', tokenId, recipient);
         console.log(`Транзакция выполнена!`);
 
         // Disconnect from the gateway.
         gateway.disconnect();
         return "Транзакция выполнена успешно!";
     } catch(error){
-        console.log(error);
+        return error.toString();
+    }
+    
+}
+
+async function HistoryForKey(tokenId){
+    try{
+        var wallet = await Wallets.newFileSystemWallet(walletPath);
+
+        // Check to see if we've already enrolled the user.
+        const identity = await wallet.get(WALLET);
+        if (!identity) {
+            console.log(`An identity for the user ${WALLET} does not exist in the wallet`);
+            return;
+        }
+
+        // Create a new gateway for connecting to our peer node.
+        const gateway = new Gateway();
+        await gateway.connect(ccp, { wallet, identity: WALLET, discovery: { enabled: true, asLocalhost: true } });
+
+        // Get the network (channel) our contract is deployed to.
+        const network = await gateway.getNetwork('mychannel');
+
+        // Get the contract from the network.
+        const contract = network.getContract('cbdc');
+        console.log(tokenId);
+        var result = await contract.evaluateTransaction('GetHistoryForKey', tokenId);
+        result = new TextDecoder('utf-8').decode(result);
+        console.log(result);
+        console.log(`Транзакция выполнена!`);
+
+        // Disconnect from the gateway.
+        gateway.disconnect();
+        return result;
+    } catch(error){
+        return error.toString();
     }
     
 }
@@ -350,7 +477,7 @@ async function EnrollAdmin(OrgID){
         const identity = await wallet.get('admin' + OrgID);
         if (identity) {
             console.log(`An identity for the admin user "admin" already exists in the wallet`);
-            return;
+            return `An identity for the admin user "admin" already exists in the wallet`;
         }
         // Enroll the admin user, and import the new identity into the wallet.
         const enrollment = await ca.enroll({ enrollmentID: 'admin', enrollmentSecret: 'adminpw' });
@@ -364,8 +491,8 @@ async function EnrollAdmin(OrgID){
         };
         await wallet.put('admin' + OrgID, x509Identity);
         console.log(`Successfully enrolled admin user "admin${OrgID}" and imported it into the wallet`);
-        // return `Successfully enrolled admin user "admin${OrgID}" and imported it into the wallet`;
-        return wallet;
+        return `Successfully enrolled admin user "admin${OrgID}" and imported it into the wallet`;
+        // return wallet;
 
     } catch (error) {
         console.error(`Failed to enroll admin user "admin${OrgID}": ${error}`);

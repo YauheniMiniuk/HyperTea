@@ -1,5 +1,8 @@
 body{
     background-color: lightgray;
+    -moz-user-select: none;
+    -khtml-user-select: none;
+    user-select: none; 
 }
 .main{
     /* position: fixed; */
@@ -96,3 +99,63 @@ body{
 img{
     object-fit: contain;
 }
+
+/* Стиль для списка */
+.list {
+    /* Убираем маркеры списка */
+    list-style: none;
+    /* Выравниваем список по центру */
+    margin: 0 auto;
+    /* Задаем ширину списка */
+    width: 80%;
+  }
+  
+  /* Стиль для элементов списка */
+  .listItem {
+    /* Добавляем границу вокруг элемента */
+    border: 1px solid black;
+    /* Добавляем отступы внутри элемента */
+    padding: 10px;
+  }
+  
+  /* Стиль для ссылок */
+  .link {
+     /* Убираем подчеркивание ссылки */
+     text-decoration: none;
+     /* Задаем цвет ссылки */
+     color: black;
+     /* Делаем ссылку блочным элементом */
+     display: block;
+  }
+  
+  /* Стиль для имени товара */
+  .name {
+     /* Задаем жирный шрифт */
+     font-weight: bold;
+     /* Задаем размер шрифта */
+     font-size: 20px;
+  }
+  
+  /* Стиль для цены товара */
+  .price {
+      /* Задаем красный цвет текста*/
+      color: red;
+      /* Задаем отступ слева*/
+      margin-left: 10px;
+  }
+  
+  /* Стиль для количества товара*/
+  .amount {
+      /* Задаем зеленый цвет текста*/
+      color:green;
+      /* Задаем отступ слева*/
+      margin-left:10px; 
+  }
+  
+  /* Стиль для владельца товара*/
+  .owner {
+      /* Задаем синий цвет текста*/
+      color:blue; 
+       /* Задаем отступ слева*/
+       margin-left:10px; 
+  }

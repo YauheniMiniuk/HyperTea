@@ -1,0 +1,37 @@
+<html>
+
+<head>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
+    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <div class="main">
+        <div id="header" class="header"></div>
+        
+        <div class="work-screen">
+            <div>
+                <h2>История токена</h2>
+            </div>
+            <form action="transactionResult.html">
+                <div class="form-control">
+                    <label for="tokenId" class="form-label">Введите ID токена</label>
+                    <input type="text" class="input-group input-group-sm input-group-text" name="tokenId" id="tokenId">
+                </div>
+                <div class="form-control">
+                    <input type="submit" class="btn btn-primary" onclick="HistoryForKey(tokenId.value)" value="Далее">
+                </div> 
+            </form>
+            
+        </div>
+        
+        <div id="navigation" class="navigation"></div>
+    </div>
+</body>
+
+<script src="./js/ui.js"></script>
+<script src="../assets/androidjs.js"></script>  
+<script src="./js/script.js"></script>
+</html>

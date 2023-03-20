@@ -4,37 +4,31 @@
 
 // const { front } = require("androidjs");
 
-
-function getDate() {
-    var date = document.getElementById('date');
-    var time = document.getElementById('time');
-    date.innerHTML = "";
-    time.innerHTML = "";
-
-    date.innerHTML += new Date().getDate() + ".";
-    date.innerHTML += new Date().getMonth() + 1 + ".";
-    date.innerHTML += new Date().getFullYear();
-
-    time.innerHTML += new Date().getHours() + ":";
-    time.innerHTML += new Date().getMinutes() + ":";
-    time.innerHTML += new Date().getSeconds();
-}
-
 function Initialize(){
-    console.log("Initialize");
     front.send("Initialize");
 }
-function Mint(){
-    front.send("Mint");
+function Mint(name, price, amount, recipient){
+    front.send("Mint", name, price, amount, recipient);
 }
 
-function ClientAccountID(){
-    // getDate();
+async function ClientAccountID(){
     front.send('ClientAccountID');
 }
-function ClientAccountBalance(){
-    // getDate();
-    front.send('ClientAccountBalance');
+
+function QueryClientTokens(){
+    front.send('QueryClientTokens');
+}
+
+function QueryTokensByClientID(clientID){
+    front.send('QueryTokensByClientID', clientID);
+}
+
+function QueryAllTokens(){
+    front.send('QueryAllTokens');
+}
+
+function HistoryForKey(tokenId){
+    front.send('HistoryForKey', tokenId);
 }
 
 function EnrollAdmin(){
@@ -119,6 +113,90 @@ function openCamera(id){
     
 }
 
+// Функция для создания ссылки из элемента JSON
+function createLink(item) {
+    // Создаем элемент <a> с атрибутом href равным значению ключа item.key
+    let link = document.createElement("a");
+    link.href = item.key;
+    // Добавляем класс link для стилизации CSS
+    link.className = "link";
+    // Создаем элемент <span> с текстом равным значению Record.name
+    let name = document.createElement("span");
+    name.textContent = item.Record.name;
+    // Добавляем класс name для стилизации CSS
+    name.className = "name";
+    // Создаем элемент <span> с текстом равным значению Record.price
+    let price = document.createElement("span");
+    price.textContent = item.Record.price;
+    // Добавляем класс price для стилизации CSS
+    price.className = "price";
+    // Создаем элемент <span> с текстом равным значению Record.amount
+    let amount = document.createElement("span");
+    amount.textContent = item.Record.amount;
+    // Добавляем класс amount для стилизации CSS
+    amount.className = "amount";
+    // Создаем элемент <span> с текстом равным значению Record.owner
+    let owner = document.createElement("span");
+    owner.textContent = item.Record.owner;
+    // Добавляем класс owner для стилизации CSS
+    owner.className = "owner";
+    // Добавляем все созданные элементы внутрь ссылки
+    link.appendChild(name);
+    link.appendChild(price);
+    link.appendChild(amount);
+    link.appendChild(owner);
+    // Возвращаем ссылку как результат функции
+    return link;
+}
+
+// Функция для принятия JSON и преобразования в список ссылок на HTML 
+function JsonToHtml(json) {
+    // Парсим JSON в массив объектов 
+    let data = JSON.parse(json);
+    // Создаем элемент <ul> для хранения списка ссылок 
+    let list = document.createElement("ul");
+    // Добавляем класс list для стилизации CSS 
+    list.className = "list";
+    // Проходим по каждому элементу массива 
+    for (let item of data) {
+        // Создаем элемент <li> для хранения одной ссылки 
+        let listItem = document.createElement("li");
+        // Добавляем класс listItem для стилизации CSS 
+        listItem.className ="listItem";
+        // Вызываем функцию createLink и передаем ей текущий элемент массива 
+        let linkItem= createLink(item);
+        // Добавляем созданную ссылку внутрь элемента <li>
+        listItem.appendChild(linkItem);
+        // Добавляем элемент <li> внутрь списка <ul>
+        list.appendChild(listItem);
+    }
+    // Возвращаем список как результат функции 
+    return list;
+}
+
+// Assuming there is a function called fetchObjects(userId) that returns a promise with the JSON data
+async function displayObjects(userId) {
+    // Get the JSON data from the API
+    let data = await fetchObjects(userId);
+    // Create an empty HTML string
+    let html = "";
+    // Loop through each object in the data
+    for (let object of data) {
+      // Extract the attributes from the object
+      let { key, Record: { name, price, amount } } = object;
+      // Create an HTML element for each object and append it to the HTML string
+      html += `<div class="object">
+        <p>Key: ${key}</p>
+        <p>Name: ${name}</p>
+        <p>Price: ${price}</p>
+        <p>Amount: ${amount}</p>
+      </div>`;
+    }
+    // Find an element with id="objects" in the document and set its innerHTML to the HTML string
+    document.getElementById("objects").innerHTML = html;
+  }
+
+
 front.on("Initialize", function(msg){
     let result = document.getElementById('result');
     if(msg == true){
@@ -128,13 +206,14 @@ front.on("Initialize", function(msg){
     result.innerText = "Не удалось инициализировать токен";
 });
 
-front.on("Mint", function(msg){
+front.on("MintResult", function(msg){
     let result = document.getElementById('result');
-    if(msg == true){
-        result.innerText = "Было выпущено 100 р.";
-        return;
-    }
-    result.innerText = "Не удалось выпустить деньги";
+    result.innerText = msg;
+    // if(msg == true){
+    //     result.innerText = "Было выпущено 100 р.";
+    //     return;
+    // }
+    // result.innerText = "Не удалось выпустить деньги";
 })
 
 front.on("ClientAccountIDResult", function(msg){
@@ -165,13 +244,31 @@ front.on("ClientAccountIDResult", function(msg){
     });
 });
 
-front.on('ClientAccountBalanceResult', function(msg){
+front.on('QueryClientTokensResult', function(msg){
     let result = document.getElementById("result"); 
-    if (msg == null){
-        result.innerText = "0 р.";
-        return;
-    }
-    result.innerText = msg;
+    var tokenState = JsonToHtml(msg);
+    result.appendChild(tokenState);
+    // result.innerHTML = tokenState;
+});
+
+front.on('QueryTokensByClientIDResult', function(msg){
+    let result = document.getElementById("result"); 
+    var tokenState = JsonToHtml(msg);
+    result.appendChild(tokenState);
+    // result.innerHTML = tokenState;
+});
+
+front.on('QueryAllTokensResult', function(msg){
+    let result = document.getElementById("result"); 
+    var tokenState = JsonToHtml(msg);
+    result.appendChild(tokenState);
+    // result.innerHTML = tokenState;
+});
+
+front.on('HistoryForKeyResult', function(msg){
+    let result = document.getElementById("result"); 
+    // var tokenState = JsonToHtml(msg);
+    result.innerHTML = msg;
 });
 
 front.on('EnrollAdminResult', function(msg){

@@ -17,7 +17,7 @@
                     <h2>Операции с кошельком</h2>
                 </div>
                 <div class="form-control">
-                    <a class="btn btn-primary list-group m-1" onclick="EnrollAdmin()">Create Admin</a>
+                    <a class="btn btn-primary list-group m-1" onclick="EnrollAdmin()" href="transactionResult.html">Create Admin</a>
                     <a class="btn btn-primary list-group m-1" href="registerUser.html">Register User</a>
                     <a class="btn btn-primary list-group m-1" href="readCert.html">Add wallet</a>
                     <a class="btn btn-primary list-group m-1" href="selectPeer.html">Select peer</a>
@@ -27,11 +27,14 @@
                     <h2>Транзакции</h2>
                 </div>
                 <div class="form-control">
-                    <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="Initialize()" href="transactionResult.html">Initialize</a>
-                    <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="Mint('100')">Mint</a>
+                    <a class="btn btn-primary list-group m-1" onclick="Initialize()" href="transactionResult.html">Initialize</a>
+                    <a class="btn btn-primary list-group m-1" href="mint.html">Mint</a>
                     <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="Burn('100')">Burn</a>
-                    <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="ClientAccountBalance()">Balance</a>
+                    <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="QueryClientTokens()">Мои токены</a>
+                    <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="QueryTokensByClientID(clientID)">Токены пользвателя</a>
+                    <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="QueryAllTokens()">Все токены</a>
                     <a class="btn btn-primary list-group m-1" href="transfer.html">Transfer</a>
+                    <a class="btn btn-primary list-group m-1" href="historyForKey.html">History</a>
                 </div>
                 <div>
                     <input type="hidden" name="result" id="result" value="hehe">

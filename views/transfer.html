@@ -24,11 +24,14 @@
                     <div id="qrReader"></div><br/>
                 </div>
                 <div class="form-control">
-                    <label for="recipient">Сумма</label>
-                    <input type="text" name="sum" id="sum" class="input-group">
+                    <label for="recipient">ID токена</label>
+                    <input type="text" name="tokenId" id="tokenId" class="input-group">
+                </div>
+                <div id="tokens">
+
                 </div>
                 <div class="form-control">
-                    <a href="transactionResult.html" class="btn btn-primary" onclick="Transfer(recipient.value, sum.value)">Отправить</a>
+                    <a href="transactionResult.html" class="btn btn-primary" onclick="Transfer(tokenId.value, recipient.value)">Отправить</a>
                 </div>
             </form>
         </div>
@@ -43,5 +46,10 @@
 <script src="./js/script.js"></script>
 <script>
     openCamera("recipient");
+</script>
+<script>
+    var clientId = ClientAccountID();
+    var tokens = QueryTokensByClientID(clientId);
+    alert(tokens);
 </script>
 </html>
