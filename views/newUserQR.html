@@ -8,14 +8,13 @@
 </head>
 
 <body>
-    <div class="main">
-        <div id="header" class="header"></div>
+    <div id="header" class="header"></div>
         
-        <div class="work-screen">
-            <div>
+        <div class="container">
+            <div class="text-center">
                 <h2>Регистрация пользователя</h2>
             </div>
-            <div class="form-control">
+            <div class="form-control text-center">
                 <label for="userName">Имя пользователя</label>
                 <input type="text" class="input-group text-center" name="userName" id="userName" readonly/>
             </div>
@@ -23,26 +22,21 @@
                 <div class="text-center">
                     <span>Сертификат</span>
                 </div>
-                <div class="text-center center imageDiv">
-                    <span id="certificate" class="text-center imageDiv"></span>
-                </div>
+                <div id="certificate" class="text-center center imageDiv"></div>
             </div>
             <div class="p-1">
                 <div class="text-center">
                     <span>Приватный ключ</span>
                 </div>
-                <div class="text-center center imageDiv">
-                    <span id="privateKey" class="text-center imageDiv"></span>
-                </div>
+                <div id="privateKey" class="text-center center imageDiv"></div>
             </div>
         </div>
         
-        <div id="navigation" class="navigation"></div>
-    </div>
+        <div id="navigation" class="fixed-bottom btn-group"></div>
 </body>
 
+<script src="./../assets/androidjs.js"></script>
 <script src="./js/ui.js"></script>
-<script src="./../assets/androidjs.js"></script>  
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 <script src="./js/script.js"></script>
 <script>
@@ -51,5 +45,16 @@
     ReadWallet(userName);
 
 </script>
+<script>
+    front.send("CheckWallet");
 
+    front.on("NoWallet", function(){
+        console.log("No Wallet");
+        console.log(window.location.href);
+        if (window.location.href != "index.html"){
+            window.location.href = 'index.html';
+        }
+        
+    });
+</script>
 </html>

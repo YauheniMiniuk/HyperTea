@@ -2,7 +2,6 @@
 
 <head>
     <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
-    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
     <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="./css/style.css" />
 </head>
@@ -11,45 +10,53 @@
     <div class="main">
         <div id="header" class="header"></div>
         
-        <div id="work-screen" class="work-screen">
-            <div class="text-center">
-                <h2>Выберите получателя</h2>
+        <div class="container">
+            <div id="work-screen" class="work-screen">
+                <div class="text-center">
+                    <h2>Выберите получателя</h2>
+                </div>
+                <form>
+                    <div class="form-control">
+                        <label for="recipient">Получатель</label>
+                        <input type="text" name="recipient" id="recipient" class="input-group">
+                    </div>
+                    <div class="form-control">
+                        <div id="qrReader"></div><br/>
+                    </div>
+                    <input type="hidden" name="token" id="token" class="input-group">
+                    <div class="form-control">
+                        <a class="btn btn-primary" onclick="Transfer(token.value, recipient.value)" href="transactionResult.html">Отправить</a>
+                    </div>
+                </form>
             </div>
-            <form>
-                <div class="form-control">
-                    <label for="recipient">Получатель</label>
-                    <input type="text" name="recipient" id="recipient" class="input-group">
-                </div>
-                <div class="form-control">
-                    <div id="qrReader"></div><br/>
-                </div>
-                <div class="form-control">
-                    <label for="recipient">ID токена</label>
-                    <input type="text" name="tokenId" id="tokenId" class="input-group">
-                </div>
-                <div id="tokens">
-
-                </div>
-                <div class="form-control">
-                    <a href="transactionResult.html" class="btn btn-primary" onclick="Transfer(tokenId.value, recipient.value)">Отправить</a>
-                </div>
-            </form>
         </div>
         
-        <div id="navigation" class="navigation"></div>
+        <div id="navigation" class="fixed-bottom btn-group"></div>
     </div>
 </body>
 
+<script src="../assets/androidjs.js"></script>
 <script src="./js/ui.js"></script>
-<script src="../assets/androidjs.js"></script>  
 <script src="./js/html5-qrcode.min.js"></script>
 <script src="./js/script.js"></script>
 <script>
     openCamera("recipient");
 </script>
 <script>
-    var clientId = ClientAccountID();
-    var tokens = QueryTokensByClientID(clientId);
-    alert(tokens);
+    front.send("CheckWallet");
+
+    front.on("NoWallet", function(){
+        console.log("No Wallet");
+        console.log(window.location.href);
+        if (window.location.href != "index.html"){
+            window.location.href = 'index.html';
+        }
+        
+    });
+</script>
+<script>
+    let params = (new URL(document.location)).searchParams; 
+    let tokenId = params.get("tokenId");
+    document.getElementById('token').setAttribute('value', tokenId);
 </script>
 </html>

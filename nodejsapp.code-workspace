@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../../Server/fabric-samples"
+		},
+		{
+			"path": "../../Server/CBDC/test-network/organizations/peerOrganizations"
+		},
+		{
+			"path": "../../Server/CBDC/CBDC"
+		},
+		{
+			"name": "chaincode-CBDC",
+			"path": "../../Server/CBDC/CBDC/chaincode-CBDC"
+		}
+	],
+	"settings": {
+		"liveServer.settings.multiRootWorkspaceName": "nodejsapp"
+	}
+}

@@ -11,37 +11,70 @@
     <div class="main">
         <div id="header" class="header"></div>
         
-        <div class="work-screen">
+        <div class="container text-center">
             <div>
                 <h2>Просканируйте сертификат</h2>
             </div>
             <form action="readKey.html">
-                <div class="form-control">
-                    <label for="userName" class="form-label">Введите имя кошелька</label>
-                    <input type="text" class="input-group input-group-sm input-group-text" name="userName" id="userName">
+                <div class="input-group">
+                    <input type="text" class="form-control mb-3" name="userName" id="userName" placeholder="Введите имя">
                 </div>
-                <div class="form-control center">
-                    <input type="hidden" class="input-group-text" name="cert" id="cert">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control w-75" id="cert" name="cert" placeholder="Сертификат">
+                    <button type="button" class="btn btn-primary" id="certReader" data-toggle="modal"
+                        data-target="#cameraModal">QR</button>
                 </div>
-                <div id="qrReader"></div>
-                <div class="form-control">
-                    <input type="submit" class="btn btn-primary" value="Далее">
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control w-75" id="pKey" name="pKey" placeholder="Ключ">
+                    <button type="button" class="btn btn-primary" id="keyReader" data-toggle="modal"
+                        data-target="#cameraModal">QR</button>
                 </div>
-                
-                
+
+                <div class="modal fade" id="cameraModal">
+                    <div class="modal-dialog modal-fullscreen">
+                        <div class="modal-content">
+                            <div id="qrReader" class="modal-body">
+                            </div>
+                            <div class="modal-footer fixed-bottom">
+                                <button type="button" class="btn btn-secondary" id="closeModal" data-dismiss="modal">Закрыть</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="input-group mb-3">
+                    <a class="btn btn-primary" onclick="RegisterUserInWallet(userName.value, cert.value, pKey.value)" href="walletAdded.html">Далее</a>
+                </div> 
             </form>
             
         </div>
         
-        <div id="navigation" class="navigation"></div>
+        <div id="navigation" class="fixed-bottom btn-group"></div>
     </div>
 </body>
 
+<script src="../assets/androidjs.js"></script>
+<script src="./lib/jquery-3.6.4.min.js"></script>
+<script src="./lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="./js/ui.js"></script>
-<script src="../assets/androidjs.js"></script>  
 <script src="./js/html5-qrcode.min.js"></script>
 <script src="./js/script.js"></script>
 <script>
-    openCamera("cert");
+    var scanner;
+    $('#certReader').on('click', function(){
+        if(scanner != null){
+            scanner.clear();
+        }
+        scanner = openCamera("cert");
+    });
+    $('#keyReader').on('click', function(){
+        if(scanner != null){
+            scanner.clear();
+        }
+        scanner = openCamera("pKey");
+    });
+    $('#closeModal').on('click', function(){
+        scanner.clear();
+    })
+    
 </script>
 </html>

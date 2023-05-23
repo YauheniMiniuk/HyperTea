@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Подключение Bootstrap CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/css/bootstrap.min.css">
+    <title>Пример Bootstrap</title>
+</head>
+
+<body>
+    <!-- Контейнер для центрирования содержимого -->
+    <div class="container">
+        <!-- Группа ввода с классом input-group для объединения input и button -->
+        <div class="input-group mb-3">
+            <!-- Input с классом form-control для базового стиля -->
+            <input type="text" class="form-control" placeholder="Введите что-нибудь">
+            <!-- Button с классами btn, btn-primary и btn-lg для синего цвета и большого размера -->
+            <!-- Атрибуты data-bs-toggle и data-bs-target для связи кнопки с модальным окном -->
+            <button type="button" class="btn btn-primary btn-lg" id="modal" data-toggle="modal"
+                data-target="#myModal">QR</button>
+        </div>
+
+        <!-- Модальное окно с классами modal и fade для анимации -->
+        <!-- Атрибут id для идентификации модального окна -->
+        <div class="modal fade" id="myModal">
+            <!-- Добавление класса modal-fullscreen для отображения модального окна на весь экран -->
+            <div class="modal-dialog modal-fullscreen">
+                <div class="modal-content">
+                    <!-- Заголовок модального окна с классом modal-header -->
+                    <!-- <div class="modal-header">
+                        <h5 class="modal-title">Модальное окно</h5> -->
+                        <!-- Кнопка закрытия модального окна с классом btn-close и атрибутом data-bs-dismiss -->
+                        <!-- <button type="button" class="btn-close" data-dismiss="modal"></button>
+                    </div> -->
+                    <!-- Тело модального окна с классом modal-body -->
+                    <div class="modal-body">
+                        <p>Здесь может быть любой контент.</p>
+                    </div>
+                    <!-- Футер модального окна с классом modal-footer -->
+                    <!-- Добавление класса fixed-bottom для прикрепления футера к нижней части экрана -->
+                    <div class="modal-footer fixed-bottom">
+                        <!-- Кнопка закрытия модального окна с классами btn и btn-secondary и атрибутом data-bs-dismiss -->
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Подключение Bootstrap CDN -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $("#modal").on("click", function () {
+            $('myModal').css({
+                'display':'flex',
+                'position':'fixed',
+            });
+        });
+    </script>
+</body>
+
+</html>

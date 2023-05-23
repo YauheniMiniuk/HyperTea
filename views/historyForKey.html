@@ -27,11 +27,23 @@
             
         </div>
         
-        <div id="navigation" class="navigation"></div>
+        <div id="navigation" class="fixed-bottom btn-group"></div>
     </div>
 </body>
 
+<script src="../assets/androidjs.js"></script> 
 <script src="./js/ui.js"></script>
-<script src="../assets/androidjs.js"></script>  
 <script src="./js/script.js"></script>
+<script>
+    front.send("CheckWallet");
+
+    front.on("NoWallet", function(){
+        console.log("No Wallet");
+        console.log(window.location.href);
+        if (window.location.href != "index.html"){
+            window.location.href = 'index.html';
+        }
+        
+    });
+</script>
 </html>

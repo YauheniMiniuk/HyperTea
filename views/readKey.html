@@ -16,7 +16,7 @@
                 <h2>Просканируйте приватный ключ</h2>
             </div>
             <div id="qrReader"></div><br/>
-            <form action="walletAdded.html">
+            <form>
 
                 <div>
                     <input type="hidden" class="input-group-text" name="userName" id="userName">
@@ -32,19 +32,20 @@
                 <div id="qrReader"></div>
 
                 <div class="form-control">
-                    <input type="submit" class="btn btn-primary" value="Далее" onclick="RegisterUserInWallet(userName.value, cert.value, pKey.value);">
+                    <a class="btn btn-primary" onclick="RegisterUserInWallet(userName.value, cert.value, pKey.value)" href="walletAdded.html">Далее</a>
                 </div>
             </form>
         </div>
         
-        <div id="navigation" class="navigation"></div>
+        <div id="navigation" class="fixed-bottom btn-group"></div>
     </div>
 </body>
 
+<script src="../assets/androidjs.js"></script>
 <script src="./js/ui.js"></script>
-<script src="../assets/androidjs.js"></script>  
 <script src="./js/html5-qrcode.min.js"></script>
 <script src="./js/script.js"></script>
+<script src="./js/wallets.js"></script>
 <script>
     let params = (new URL(document.location)).searchParams; 
     let userName = params.get("userName");

@@ -1,0 +1,63 @@
+<html>
+<head>
+    <style>
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+        .modal-content {
+            position: relative;
+            margin: auto;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+        }
+        .close {
+            color: white;
+            position: fixed;
+            bottom: 20%;
+            left: 50%;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .close-btn {
+            display: block;
+            background-color: white;
+            border: none;
+            color: black;
+            font-size: 16px;
+        }
+        .close-btn:hover {
+            background-color: #ddd;
+            cursor: pointer;
+        }
+        #reader {
+            width: 100%;
+            height: 80%;
+        }
+    </style>
+</head>
+<body>
+    <button id="myBtn">Открыть QR сканер</button>
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <div id="reader"></div>
+            <button class="close">&times;</button>
+        </div>
+    </div>
+</body>
+
+</html>

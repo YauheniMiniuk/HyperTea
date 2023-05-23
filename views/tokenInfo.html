@@ -1,0 +1,79 @@
+<html>
+
+<head>
+    <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
+    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./css/style.css" />
+</head>
+
+<body>
+    <div class="main">
+        <div id="header" class="header"></div>
+
+        <div class="container">
+            <div id="work-screen" class="work-screen">
+                
+                    <div class="form-control m-1">
+                        <h2>
+                            Информация о токене
+                        </h2>
+                        <input type="hidden" id="tokenId" name="tokenId" readonly>
+                        <div class="form-control m-1">
+                            <label for="name">Название токена</label>
+                            <input class="input-group" type="text" name="name" id="name" readonly>
+                        </div>
+                        <div class="form-control m-1">
+                            <label for="price">Стоимость</label>
+                            <input class="input-group" type="text" name="price" id="price" readonly>
+                        </div>
+                        <div class="form-control m-1">
+                            <label for="amount">Количество</label>
+                            <input class="input-group" type="text" name="amount" id="amount" readonly>
+                        </div>
+                    </div>
+                    <div class="form-control m-1">
+                        <h2>
+                            Операции
+                        </h2>
+                        <div class="form-control">
+                            <form action="transfer.html">
+                                <input type="hidden" class="tokenId" name="tokenId" readonly>
+                                <input type="submit" class="btn btn-primary input-group p-1" value="Передать токен">
+                            </form>
+                            <form action="transactionResult.html">
+                                <input type="hidden" class="tokenId" name="tokenId" readonly>
+                                <input type="submit" class="btn btn-primary input-group p-1" onclick="HistoryForKey(tokenId.value)" value="История токена" />
+                            </form>
+                        </div>
+                    </div>
+            </div>  
+        </div>
+        
+        <div id="navigation" class="fixed-bottom btn-group"></div>
+    </div>
+</body>
+
+<script src="../assets/androidjs.js"></script>
+<script src="./js/ui.js"></script>
+<script src="./js/script.js"></script>
+<script src="./js/wallets.js"></script>
+<script>
+    front.send("CheckWallet");
+
+    front.on("NoWallet", function(){
+        console.log("No Wallet");
+        console.log(window.location.href);
+        if (window.location.href != "index.html"){
+            window.location.href = 'index.html';
+        }
+        
+    });
+</script>
+<script>
+    let params = (new URL(document.location)).searchParams; 
+    let tokenId = params.get("tokenId");
+    QueryToken(tokenId);
+</script>
+
+</html>

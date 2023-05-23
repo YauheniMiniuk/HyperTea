@@ -3,57 +3,90 @@
 <head>
     <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
     <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
-    <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./lib/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
 </head>
 
 <body>
-    <div class="main">
-        <div id="header" class="header"></div>
-        
-        <div class="work-screen">
-            <div>
-                <h2>Регистрация пользователя</h2>
-            </div>
-            <form action="transactionResult.html">
-                <div class="form-control">
-                    <label for="tokenName">Название токена</label>
-                    <input type="text" class="input-group" name="tokenName" id="tokenName"/>
-                </div>
+    <div id="header" class="header"></div>
 
-                <div class="form-control">
-                    <label for="price">Стоимость</label>
-                    <input type="text" class="input-group" name="price" id="price"/>
-                </div>
-
-                <div class="form-control">
-                    <label for="amount">Количество</label>
-                    <input type="text" class="input-group" name="amount" id="amount"/>
-                </div>
-
-                <div class="form-control">
-                    <label for="recipient">Получатель</label>
-                    <input type="text" class="input-group" name="recipient" id="recipient"/>
-                </div>
-
-                <div class="form-control">
-                    <input type="submit" class="btn btn-primary" onclick="Mint(tokenName.value, price.value, amount.value, recipient.value)" value="Подтвердить"/>
-                    <a href="admin.html" class="btn btn-danger" id="cancel">Отклонить</a>
-                </div>
-
-            </form>
-            <div>
-                <span id="result" class="text-center"></span>
-            </div>
+    <div class="container text-center">
+        <div class="align-items-center">
+            <h2>Выпуск токена</h2>
         </div>
-        
-        <div id="navigation" class="navigation"></div>
+        <form action="transactionResult.html">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="tokenName" id="tokenName" placeholder="Название токена">
+            </div>
+
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="price" id="price" placeholder="Стоимость">
+            </div>
+
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="amount" id="amount" placeholder="Количество">
+            </div>
+
+            <div class="input-group mb-3">
+                <input type="text" class="form-control w-75" id="recipient" name="recipient" placeholder="Получатель">
+                <button type="button" class="btn btn-primary" id="openModal" data-toggle="modal"
+                    data-target="#cameraModal">QR</button>
+            </div>
+            <div class="modal fade" id="cameraModal">
+                <div class="modal-dialog modal-fullscreen">
+                    <div class="modal-content">
+                        <div id="qrReader" class="modal-body">
+                        </div>
+                        <div class="modal-footer fixed-bottom">
+                            <button type="button" class="btn btn-secondary" id="closeModal" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-group center">
+                <input type="submit" class="btn btn-primary col"
+                    onclick="Mint(tokenName.value, price.value, amount.value, recipient.value)" value="Подтвердить" />
+                <a href="admin.html" class="btn btn-danger col" id="cancel">Отклонить</a>
+            </div>
+
+        </form>
     </div>
+
+    <div id="navigation" class="fixed-bottom btn-group"></div>
 </body>
 
+<script src="./../assets/androidjs.js"></script>
 <script src="./js/ui.js"></script>
-<script src="./../assets/androidjs.js"></script>  
+<script src="./lib/jquery-3.6.4.min.js"></script>
+<script src="./lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="./js/html5-qrcode.min.js"></script>
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 <script src="./js/script.js"></script>
+<script>
+    front.send("CheckWallet");
+
+    front.on("NoWallet", function () {
+        console.log("No Wallet");
+        console.log(window.location.href);
+        if (window.location.href != "index.html") {
+            window.location.href = 'index.html';
+        }
+
+    });
+</script>
+<script>
+    var scanner;
+    $('#openModal').on('click', function(){
+        if(scanner != null){
+            scanner.clear();
+        }
+        scanner = openCamera("recipient");
+    });
+    $('#closeModal').on('click', function(){
+        scanner.clear();
+    })
+    
+</script>
 
 </html>

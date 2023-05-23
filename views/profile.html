@@ -2,31 +2,66 @@
 
 <head>
     <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
-    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
-    <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="./lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="./css/style.css" />
 </head>
 
 <body>
-    <div class="main">
-        <div id="header" class="header"></div>
-        <div class="text-center">
-            <h2>Ваш ID</h2>
+    <div id="header" class="header"></div>
+    <div class="container">
+        <div class="container2">
+            <div class="text-center">
+                <h2>Ваш профиль</h2>
+            </div>
+            <div class="form-control">
+                <a class="btn btn-primary list-group m-1" id="openQrModal" data-toggle="modal" data-target="#cameraModal">QR</a>
+            </div>
+            
+            <div class="modal fade" id="cameraModal">
+                <!-- Добавление класса modal-fullscreen для отображения модального окна на весь экран -->
+                <div class="modal-dialog modal-fullscreen">
+                    <div class="modal-content">
+                        <div id="qr" class="qrImage"></div>
+                        <div id="loader" class="loader"></div>
+                        <div class="modal-footer fixed-bottom">
+                            <button type="button" class="btn btn-danger" id="closeModal" data-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-control">
+                <a class="btn btn-primary list-group m-1" href="transactionResult.html" onclick="QueryClientTokens()">Мои
+                    токены</a>
+            </div>
         </div>
-        <div class="work-screen">
-            <div id="result" class="m-3"></div>
-        </div>
-        
-        <div id="navigation" class="navigation"></div>
     </div>
+    </div>
+
+    <div id="navigation" class="fixed-bottom btn-group"></div>
 </body>
 
+<script src="../assets/androidjs.js"></script>
+<script src="./lib/jquery-3.6.4.min.js"></script>
+<script src="./lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 <script src="./js/ui.js"></script>
-<script src="../assets/androidjs.js"></script>  
 <script src="./js/script.js"></script>
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 <script>
-    ClientAccountID();
+    front.send("CheckWallet");
+
+    front.on("NoWallet", function () {
+        console.log("No Wallet");
+        console.log(window.location.href);
+        if (window.location.href != "index.html") {
+            window.location.href = 'index.html';
+        }
+
+    });
+</script>
+<script>
+    $('#openQrModal').on('click', function () {
+        ClientAccountID();
+    });
 </script>
 
 </html>

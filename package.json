@@ -1,7 +1,7 @@
 {
-  "name": "myapp",
-  "app-name": "myapp",
-  "package-name": "mypkg",
+  "name": "Teas",
+  "app-name": "Teas",
+  "package-name": "Teas",
   "project-type": "webview",
   "icon": "./assets/icon/icon.png",
   "directories": {
@@ -27,6 +27,7 @@
   "license": "ISC",
   "dependencies": {
     "androidjs": "^1.0.5",
+    "bootstrap": "^5.0.0-alpha2",
     "fabric-ca-client": "^2.2.16",
     "fabric-network": "^2.2.16"
   }

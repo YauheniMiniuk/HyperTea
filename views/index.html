@@ -2,7 +2,6 @@
 
 <head>
     <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
-    <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
     <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="./css/style.css" />
 </head>
@@ -10,15 +9,23 @@
 <body>
     <div class="main">
         <div id="header" class="header"></div>
-        
-        <div class="text-center">
-            <h2>Доступные кошельки</h2>
-        </div>
 
-        <div id="work-screen" class="work-screen">
+        <div class="container">
+            <div id="work-screen" class="work-screen form-control">
+                <div class="text-center">
+                    <h2>Доступные кошельки</h2>
+                </div>
+                <div id="walletList"></div>
+                <div id="loader" class="loader"></div>
+                <div class="addWalletBtn">
+                    <a class="btn btn-primary" onclick="EnrollAdmin()" href="transactionResult.html">Create Admin</a>
+                    <a class="btn btn-primary" href="selectPeer.html">Select peer</a>
+                    <a href="readCert.html" class="btn btn-primary">Добавить кошелек</a>
+                </div>
+            </div>
+            
         </div>
-        
-        <div id="navigation" class="navigation"></div>
+        <div id="navigation" class="fixed-bottom btn-group"></div>
     </div>
 </body>
 

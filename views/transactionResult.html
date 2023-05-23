@@ -10,20 +10,19 @@
 <body>
     <div class="main">
         <div id="header" class="header"></div>
-        
-        <div class="work-screen">
-            <div class="text-center">
-                <h2>Результат транзакции</h2>
+        <div class="container">
+            <div class="work-screen">
+                <h2 id="result" class="result"></h2>
+                <div id="loader" class="loader"></div>
             </div>
-            <h2 id="result" class="result"></h2>
         </div>
         
-        <div id="navigation" class="navigation"></div>
+        <div id="navigation" class="fixed-bottom btn-group"></div>
     </div>
 </body>
 
+<script src="../assets/androidjs.js"></script>
 <script src="./js/ui.js"></script>
-<script src="../assets/androidjs.js"></script>  
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 <script src="./js/script.js"></script>
 <script>
@@ -31,5 +30,16 @@
     let result = params.get("result");
     document.getElementById('result').innerText = result;
 </script>
+<script>
+    front.send("CheckWallet");
 
+    front.on("NoWallet", function(){
+        console.log("No Wallet");
+        console.log(window.location.href);
+        if (window.location.href != "index.html"){
+            window.location.href = 'index.html';
+        }
+        
+    });
+</script>
 </html>

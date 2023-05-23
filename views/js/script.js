@@ -1,301 +1,187 @@
-// define function to get the data from storage if file already saved
+const TransactionResult = {
+    OK: 'Транзакция выполнена успешно',
+    Error: 'Ошибка при выполнении транзакции',
+    NoUserInWallet: 'Не удалось найти пользователе в кошельке',
+    UserImportOK: 'Пользователь был импортирован в ваш кошелёк',
+    CannotImportInWallet: 'Не удалось импортировать в кошелёк',
+    CannotRegisterUser: 'Не удалось зарегистрировать пользователя на платформе'
+}
 
-// const { front } = require("androidjs");
 
-// const { front } = require("androidjs");
-
-function Initialize(){
+function Initialize() {
     front.send("Initialize");
 }
-function Mint(name, price, amount, recipient){
-    front.send("Mint", name, price, amount, recipient);
-}
+front.on("Initialize", function (msg) {
+    let loader = document.getElementById('loader');
+    loader.setAttribute('class', '');
 
-async function ClientAccountID(){
-    front.send('ClientAccountID');
-}
-
-function QueryClientTokens(){
-    front.send('QueryClientTokens');
-}
-
-function QueryTokensByClientID(clientID){
-    front.send('QueryTokensByClientID', clientID);
-}
-
-function QueryAllTokens(){
-    front.send('QueryAllTokens');
-}
-
-function HistoryForKey(tokenId){
-    front.send('HistoryForKey', tokenId);
-}
-
-function EnrollAdmin(){
-    front.send("EnrollAdmin");
-}
-
-function RegisterUserLedger(userName){
-    front.send("RegisterUserLedger", userName);
-}
-
-function ReadWallet(userName){
-    front.send("ReadWallet", userName);
-    document.getElementById('userName').setAttribute("value", userName);
-}
-
-function GenerateQR(){
-    ClearMainForm();
-
-    GetForm("qrForm", "image-center")
-
-    front.send("ClientAccountID");
-}
-function SendForm(){
-    ClearMainForm();
-    GetForm("sendForm", "center");
-}
-
-function GetCamera(){
-    ClearMainForm();
-    var resultContainer = document.getElementById('qr-reader-results');
-    var lastResult = 0;
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-        "qrReader", { fps: 10, qrbox: 125 });
-    html5QrcodeScanner.render(onScanSuccess);
-}
-function GetForm(id, attribute=""){
-    var form = document.getElementById(id);
-    form.setAttribute("class", attribute);
-}
-
-function Transfer(recipient, sum){
-    front.send("Transfer", recipient, sum);
-}
-// function openCamera(){
-//     function onScanSuccess(decodedText, decodedResult) {
-//         var resultContainer = document.getElementById('qrResult');
-//         lastResult = decodedText;
-//         console.log(`Scan result ${decodedText}`, decodedResult);
-//         resultContainer.innerText = decodedText;
-//         html5QrcodeScanner.clear();
-//     }
-
-//     var lastResult = 0;
-//     var html5QrcodeScanner = new Html5QrcodeScanner(
-//         "qrReader", { fps: 10, qrbox: 150 });
-//     html5QrcodeScanner.render(onScanSuccess);
-    
-// }
-
-function openCamera(id){
-    let width = window.innerWidth;
-    let height = window.innerHeight;
-    let size;
-    if(width<height){
-        size = width * 0.95;
-    }
-    else{
-        size=height * 0.95;
-    }
-    function onScanSuccess(decodedText, decodedResult) {
-        var resultContainer = document.getElementById(id);
-        lastResult = decodedText;
-        console.log(decodedText);
-        resultContainer.setAttribute("value", decodedText);
-        html5QrcodeScanner.clear();
-    }
-
-    var lastResult = 0;
-    var html5QrcodeScanner = new Html5QrcodeScanner(
-        "qrReader", { fps: 10, qrbox: size });
-    html5QrcodeScanner.render(onScanSuccess);
-    
-}
-
-// Функция для создания ссылки из элемента JSON
-function createLink(item) {
-    // Создаем элемент <a> с атрибутом href равным значению ключа item.key
-    let link = document.createElement("a");
-    link.href = item.key;
-    // Добавляем класс link для стилизации CSS
-    link.className = "link";
-    // Создаем элемент <span> с текстом равным значению Record.name
-    let name = document.createElement("span");
-    name.textContent = item.Record.name;
-    // Добавляем класс name для стилизации CSS
-    name.className = "name";
-    // Создаем элемент <span> с текстом равным значению Record.price
-    let price = document.createElement("span");
-    price.textContent = item.Record.price;
-    // Добавляем класс price для стилизации CSS
-    price.className = "price";
-    // Создаем элемент <span> с текстом равным значению Record.amount
-    let amount = document.createElement("span");
-    amount.textContent = item.Record.amount;
-    // Добавляем класс amount для стилизации CSS
-    amount.className = "amount";
-    // Создаем элемент <span> с текстом равным значению Record.owner
-    let owner = document.createElement("span");
-    owner.textContent = item.Record.owner;
-    // Добавляем класс owner для стилизации CSS
-    owner.className = "owner";
-    // Добавляем все созданные элементы внутрь ссылки
-    link.appendChild(name);
-    link.appendChild(price);
-    link.appendChild(amount);
-    link.appendChild(owner);
-    // Возвращаем ссылку как результат функции
-    return link;
-}
-
-// Функция для принятия JSON и преобразования в список ссылок на HTML 
-function JsonToHtml(json) {
-    // Парсим JSON в массив объектов 
-    let data = JSON.parse(json);
-    // Создаем элемент <ul> для хранения списка ссылок 
-    let list = document.createElement("ul");
-    // Добавляем класс list для стилизации CSS 
-    list.className = "list";
-    // Проходим по каждому элементу массива 
-    for (let item of data) {
-        // Создаем элемент <li> для хранения одной ссылки 
-        let listItem = document.createElement("li");
-        // Добавляем класс listItem для стилизации CSS 
-        listItem.className ="listItem";
-        // Вызываем функцию createLink и передаем ей текущий элемент массива 
-        let linkItem= createLink(item);
-        // Добавляем созданную ссылку внутрь элемента <li>
-        listItem.appendChild(linkItem);
-        // Добавляем элемент <li> внутрь списка <ul>
-        list.appendChild(listItem);
-    }
-    // Возвращаем список как результат функции 
-    return list;
-}
-
-// Assuming there is a function called fetchObjects(userId) that returns a promise with the JSON data
-async function displayObjects(userId) {
-    // Get the JSON data from the API
-    let data = await fetchObjects(userId);
-    // Create an empty HTML string
-    let html = "";
-    // Loop through each object in the data
-    for (let object of data) {
-      // Extract the attributes from the object
-      let { key, Record: { name, price, amount } } = object;
-      // Create an HTML element for each object and append it to the HTML string
-      html += `<div class="object">
-        <p>Key: ${key}</p>
-        <p>Name: ${name}</p>
-        <p>Price: ${price}</p>
-        <p>Amount: ${amount}</p>
-      </div>`;
-    }
-    // Find an element with id="objects" in the document and set its innerHTML to the HTML string
-    document.getElementById("objects").innerHTML = html;
-  }
-
-
-front.on("Initialize", function(msg){
     let result = document.getElementById('result');
-    if(msg == true){
+    if (msg == true) {
         result.innerText = "Токен инициализирован";
         return;
     }
     result.innerText = "Не удалось инициализировать токен";
 });
+function Mint(name, price, amount, recipient) {
+    front.send("Mint", name, price, amount, recipient);
+}
+front.on("MintResult", function (msg) {
+    let loader = document.getElementById('loader');
+    loader.setAttribute('class', '');
 
-front.on("MintResult", function(msg){
     let result = document.getElementById('result');
     result.innerText = msg;
-    // if(msg == true){
-    //     result.innerText = "Было выпущено 100 р.";
-    //     return;
-    // }
-    // result.innerText = "Не удалось выпустить деньги";
 })
 
-front.on("ClientAccountIDResult", function(msg){
+async function ClientAccountID() {
+    front.send('ClientAccountID');
+}
+front.on("ClientAccountIDResult", function (msg) {
+    let loader = document.getElementById('loader');
+    loader.setAttribute('class', '');
+
+    let text = msg;
+
+    if (msg == null) {
+        text = "Error: " + msg;
+        return;
+    }
+    GenerateQR("qr", text);
+
+});
+
+function GenerateQR(selector, text) {
+    var qr = document.getElementById(selector);
+    qr.innerHTML = "";
+
     let width = window.innerWidth;
     let height = window.innerHeight;
     let size;
-    if(width<height){
-        size = width * 0.95;
+    if (width < height) {
+        size = width * 0.85;
     }
-    else{
-        size=height * 0.8;
+    else {
+        size = height * 0.85;
     }
-    var result = document.getElementById("result");
-    
-    result.innerHTML = "";
-    console.log(msg);
-    if(msg == null){
-        result.innerText = "Error " + msg;
-        return;
-    }
-    var qrcode = new QRCode(result, {
-        text: msg,
+    var qrcode = new QRCode(selector, {
+        text: text,
         width: size,
         height: size,
-        colorDark : "#000",
-        colorLight : "#fff",
-        correctLevel : QRCode.CorrectLevel.H
+        colorDark: "#000",
+        colorLight: "#fff",
+        correctLevel: QRCode.CorrectLevel.H
     });
+    console.log(text);
+}
+
+function QueryClientTokens() {
+    front.send('QueryClientTokens');
+}
+front.on('QueryClientTokensResult', function (json) {
+    let loader = document.getElementById('loader');
+    loader.setAttribute('class', '');
+
+    let result = document.getElementById("result");
+    var tokenState = JsonToHtml(json);
+    result.appendChild(tokenState);
 });
 
-front.on('QueryClientTokensResult', function(msg){
-    let result = document.getElementById("result"); 
+function QueryTokensByClientID(clientID) {
+    front.send('QueryTokensByClientID', clientID);
+}
+front.on('QueryTokensByClientIDResult', function (msg) {
+    let loader = document.getElementById('loader');
+    loader.setAttribute('class', '');
+
+    let result = document.getElementById("result");
     var tokenState = JsonToHtml(msg);
     result.appendChild(tokenState);
     // result.innerHTML = tokenState;
 });
 
-front.on('QueryTokensByClientIDResult', function(msg){
-    let result = document.getElementById("result"); 
+function QueryAllTokens() {
+    front.send('QueryAllTokens');
+}
+front.on('QueryAllTokensResult', function (msg) {
+    let loader = document.getElementById('loader');
+    loader.setAttribute('class', '');
+
+    let result = document.getElementById("result");
     var tokenState = JsonToHtml(msg);
     result.appendChild(tokenState);
     // result.innerHTML = tokenState;
 });
 
-front.on('QueryAllTokensResult', function(msg){
-    let result = document.getElementById("result"); 
-    var tokenState = JsonToHtml(msg);
-    result.appendChild(tokenState);
-    // result.innerHTML = tokenState;
-});
+function QueryToken(tokenId) {
+    front.send('QueryToken', tokenId);
+}
+front.on('QueryTokenResult', async function (tokenJSON) {
+    console.log('QueryToken: ' + tokenJSON);
+    let token = JSON.parse(tokenJSON);
 
-front.on('HistoryForKeyResult', function(msg){
-    let result = document.getElementById("result"); 
-    // var tokenState = JsonToHtml(msg);
-    result.innerHTML = msg;
-});
+    let params = (new URL(document.location)).searchParams;
+    let tokenId = params.get("tokenId");
 
-front.on('EnrollAdminResult', function(msg){
-    let result = document.getElementById('result');
-    if (msg != true){
-        result.innerText = "Не удалось зарегистрировать администратора";
-        return;
+    let tokenIds = document.getElementsByName('tokenId');
+    console.log(tokenIds);
+    for (let i = 0; i < tokenIds.length; i++) {
+        tokenIds[i].setAttribute('value', tokenId);
     }
-    result.innerText = "Администратор был успешно зарегистрирован";
+    document.getElementById('name').setAttribute('value', token.name);
+    document.getElementById('price').setAttribute('value', token.price);
+    document.getElementById('amount').setAttribute('value', token.amount);
+
 });
 
+function HistoryForKey(tokenId) {
+    front.send('HistoryForKey', tokenId);
+}
 
-// front.on('EnrollAdminResult', function(msg){
-//     let result = document.getElementById('result');
-//     console.log(msg);
-//     result.innerText = msg;
-// })
+front.on('HistoryForKeyResult', function (resultArray) {
+    let loader = document.getElementById('loader');
+    loader.setAttribute('class', '');
 
-front.on("ReadWalletResult", async function(x509Identity){
+    let result = document.getElementById("result");
+    for (let res in TransactionResult) {
+        if (res == resultArray) {
+            result.appendChild(res);
+            return;
+        }
+    }
+    let resultString = new TextDecoder('utf-8').decode(resultArray);
+    console.log(resultString);
+    var tokenState = HistoryJsonToHtml(resultString);
+    result.appendChild(tokenState);
+});
+function EnrollAdmin() {
+    front.send("EnrollAdmin");
+}
+front.on('EnrollAdminResult', function (msg) {
+    let loader = document.getElementById('loader');
+    loader.setAttribute('class', '');
+
+    let result = document.getElementById('result');
+    console.log(msg);
+    result.appendChild(msg);
+})
+
+function RegisterUserLedger(userName) {
+    front.send("RegisterUserLedger", userName);
+}
+
+function ReadWallet(userName) {
+    front.send("ReadWallet", userName);
+    document.getElementById('userName').setAttribute("value", userName);
+}
+front.on("ReadWalletResult", async function (x509Identity) {
     let width = window.innerWidth;
     let height = window.innerHeight;
     let size;
-    if(width<height){
+    if (width < height) {
         size = width * 0.95;
     }
-    else{
-        size=height * 0.8;
+    else {
+        size = height * 0.8;
     }
 
     var certificate = document.getElementById("certificate");
@@ -304,7 +190,7 @@ front.on("ReadWalletResult", async function(x509Identity){
     certificate.innerHTML = "";
     privateKey.innerHTML = "";
 
-    if(x509Identity == null){
+    if (x509Identity == null) {
         certificate.innerText = "Error";
         privateKey.innerText = "Error";
         return;
@@ -313,9 +199,9 @@ front.on("ReadWalletResult", async function(x509Identity){
         text: `${x509Identity['credentials']['certificate']}`,
         width: size,
         height: size,
-        colorDark : "#000",
-        colorLight : "#fff",
-        correctLevel : QRCode.CorrectLevel.H,
+        colorDark: "#000",
+        colorLight: "#fff",
+        correctLevel: QRCode.CorrectLevel.H,
         class: "image"
     });
 
@@ -323,15 +209,137 @@ front.on("ReadWalletResult", async function(x509Identity){
         text: `${x509Identity['credentials']['privateKey']}`,
         width: size,
         height: size,
-        colorDark : "#000",
-        colorLight : "#fff",
-        correctLevel : QRCode.CorrectLevel.H,
+        colorDark: "#000",
+        colorLight: "#fff",
+        correctLevel: QRCode.CorrectLevel.H,
         class: "image"
     });
 })
 
-front.on('TransferResult', function(msg){
+function Transfer(recipient, sum) {
+    front.send("Transfer", recipient, sum);
+}
+front.on('TransferResult', function (msg) {
+    let loader = document.getElementById('loader');
+    loader.setAttribute('class', '');
+
     let result = document.getElementById('result');
     result.innerText = msg;
 })
+
+function openCamera(id) {
+    let width = window.innerWidth;
+    let height = window.innerHeight;
+    let size;
+    if (width < height) {
+        size = width * 0.6;
+    }
+    else {
+        size = height * 0.6;
+    }
+    console.log(size);
+    function onScanSuccess(decodedText, decodedResult) {
+        var resultContainer = document.getElementById(id);
+        lastResult = decodedText;
+        alert(decodedText);
+        resultContainer.setAttribute("value", decodedText);
+        html5QrcodeScanner.clear();
+    }
+
+    var lastResult = 0;
+    var html5QrcodeScanner = new Html5QrcodeScanner(
+        "qrReader", { fps: 60, qrbox: size });
+    html5QrcodeScanner.render(onScanSuccess);
+    return html5QrcodeScanner;
+}
+
+function JsonToHtml(json) {
+    let data = JSON.parse(json);
+    // Создаем div, в котором будут все объекты
+    let list = document.createElement('div');
+    list.className = 'list-group';
+
+    if (data.length == 0) {
+        let h2 = document.createElement('h2');
+        h2.innerText = "Пусто";
+        list.append(h2);
+        return list;
+    }
+    for (let item of data) {
+        let link = document.createElement('a');
+        link.href = "tokenInfo.html?tokenId=" + item.key;
+        link.className = 'list-group-item list-group-item-action flex-column align-items-start active mb-1';
+        list.appendChild(link);
+
+        let header = document.createElement('div');
+        header.className = 'd-flex w-100 justify-content-between';
+        link.appendChild(header);
+
+        let name = document.createElement('h5');
+        name.className = 'mb-1';
+        name.innerText = item.Record.name;
+        header.appendChild(name);
+
+        let price = document.createElement('p');
+        price.className = 'mb-1';
+        price.innerText = 'Цена: ' + item.Record.price;
+        link.appendChild(price);
+
+        let amount = document.createElement('p');
+        amount.className = 'mb-1';
+        amount.innerText = 'Количество: ' + item.Record.amount;
+        link.appendChild(amount);
+
+    }
+    return list;
+}
+function HistoryJsonToHtml(json) {
+    let data = JSON.parse(json);
+    // Создаем div, в котором будут все объекты
+    let list = document.createElement('div');
+    list.className = 'list-group';
+
+    for (let item of data) {
+        let div = document.createElement('div');
+        div.className = 'list-group-item list-group-item-action flex-column align-items-start active mb-1';
+        list.appendChild(div);
+
+        let header = document.createElement('div');
+        header.className = 'd-flex w-100 justify-content-between';
+        div.appendChild(header);
+
+        let name = document.createElement('h5');
+        name.className = 'mb-1';
+        name.innerText = item.txID;
+        header.appendChild(name);
+
+        let price = document.createElement('p');
+        price.className = 'mb-1';
+        price.innerText = item.timestamp;
+        div.appendChild(price);
+
+    }
+    return list;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

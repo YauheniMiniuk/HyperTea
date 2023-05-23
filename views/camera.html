@@ -4,29 +4,42 @@
     <meta name="viewport" charset="utf-8" content="width=device-width, initial-scale=1.0">
     <!-- Add this androidjs.js file to your html file to get the functionality of android js -->
     <link rel="stylesheet" href="./lib/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="./css/style.css" />
+    <!-- <link rel="stylesheet" href="./css/style.css" /> -->
 </head>
 
 <body>
     <div class="main">
         <div id="header" class="header"></div>
         
-        <div class="work-screen">
-            <div id="qrReader"></div><br/>
-            <div id="qrResult"></div>
+        <div class="container">
+            <div class="work-screen">
+                <div id="qrReader"></div><br/>
+                <div id="qrResult"></div>
+            </div>
         </div>
         
-        <div id="navigation" class="navigation"></div>
+        <div id="navigation" class="fixed-bottom btn-group"></div>
     </div>
 </body>
 
-<script src="./js/ui.js"></script>
-
 <script src="../assets/androidjs.js"></script>  
+<script src="./js/ui.js"></script>
 <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 <script src="./js/html5-qrcode.min.js"></script>
 <script src="./js/script.js"></script>  
 <script>
     openCamera();
+</script>
+<script>
+    front.send("CheckWallet");
+
+    front.on("NoWallet", function(){
+        console.log("No Wallet");
+        console.log(window.location.href);
+        if (window.location.href != "index.html"){
+            window.location.href = 'index.html';
+        }
+        
+    });
 </script>
 </html>

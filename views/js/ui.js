@@ -2,8 +2,9 @@ function loadHeader(){
     let header = document.getElementById("header");
     // <button class="btn btn-primary">Back</button>
     header.innerHTML = `<div class="header-menu">
-                            <div class="btns">
-                                    <span>Made by Evgeny Miniuk</span>
+                            <div class="text-center">
+                                    <div id="wallet"></div>
+                                    <div id="orgID"></div>
                                 </div>
                             </div>`;
 }
@@ -19,14 +20,9 @@ function loadHeader(){
 
 function loadNavigation(){
     let navigation = document.getElementById("navigation");
-    navigation.innerHTML = `<div class="navigation-menu">
-                                <div class="btns">
-                                    <a class="btn btn-primary" href="index.html">Home</a>
-                                    <a class="btn btn-primary" href="profile.html">Profile</a>
-                                    <a class="btn btn-secondary" href="camera.html">QR</a>
-                                    <a class="btn btn-primary" href="admin.html">Admin</a>
-                                </div>
-                            </div>`;
+    navigation.innerHTML = `<a class="btn btn-primary col" href="index.html">Home</a>
+    <a class="btn btn-primary col" href="profile.html">Profile</a>
+    <a class="btn btn-primary col" href="admin.html">Admin</a>`;
     var fs = new FileSystem();
 }
 try{
@@ -35,3 +31,17 @@ try{
 try{
     loadNavigation();
 }catch{}
+
+
+front.send("CurrentWallet");
+front.on("CurrentWallet", function(answer){
+    var wallet = document.getElementById('wallet');
+    wallet.innerText = answer;
+});
+
+front.send("CurrentOrgID");
+front.on("CurrentOrgID", function(OrgID){
+    console.log("OrgID: " + OrgID);
+    var orgID = document.getElementById('orgID');
+    orgID.innerText = OrgID;
+})
